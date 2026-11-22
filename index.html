@@ -1046,7 +1046,8 @@ async function pushGuides() {
 }
 
 async function pushSingleFile(token, fname, file) {
-  const content = await file.text();
+  // Read raw bytes to preserve exact content (no text decoding/re-encoding)
+  const buf = new Uint8Array(await file.arrayBuffer());
   
   let sha = '';
   const metaResp = await fetch(
@@ -1058,7 +1059,7 @@ async function pushSingleFile(token, fname, file) {
     sha = meta.sha;
   }
   
-  const b64Content = bytesToB64(new TextEncoder().encode(content));
+  const b64Content = bytesToB64(buf);
   const resp = await fetch(
     `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fname}`,
     {
