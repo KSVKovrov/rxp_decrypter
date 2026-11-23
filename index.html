@@ -765,10 +765,11 @@ async function generateGuide() {
     setStatus("Please enter your BattleTag first.", "error");
     return;
   }
-  if (!/^[^#]+#\d+$/.test(tag)) {
+  if (!/^([^#]+)#(\d+)$/.test(tag)) {
     setStatus("Invalid format. Use: Name#1234", "error");
     return;
   }
+  // Allow Unicode characters in BattleTags (Korean, CJK, etc.)
 
   const locale = document.getElementById('language').value;
   
